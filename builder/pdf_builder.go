@@ -12,7 +12,7 @@ import (
 	"github.com/rsmarincu/billr/repository"
 )
 
-const gottenburgUrl = "http://localhost:3001/forms/chromium/convert/html"
+const gottenburgUrl = "http://localhost:3002/forms/chromium/convert/html"
 
 type PdfBuilder interface {
 	BuildPdf(ctx context.Context, billId string) ([]byte, string, error)

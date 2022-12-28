@@ -19,7 +19,7 @@ func TestPdfBuilder_BuildPdf(t *testing.T) {
 	invoice := domain.Invoice{
 		Id:            invoiceId,
 		InvoiceNumber: "testNumber-1234",
-		UserCompany: domain.Company{
+		Company: domain.Company{
 			Id:                 "company_1",
 			Name:               "UserCompany",
 			RegistrationNumber: "F32/321/32",
@@ -35,21 +35,17 @@ func TestPdfBuilder_BuildPdf(t *testing.T) {
 			Country:       "Romania",
 			PostCode:      "550005",
 		},
-		InvoicedCompany: domain.Company{
+		Client: domain.Client{
 			Id:                 "company_1",
 			Name:               "UserCompany",
 			RegistrationNumber: "F32/321/32",
 			CUI:                "21312321312",
 			VatId:              "RO1230123",
 			Email:              "rsmarincu@gmail.com",
-			BankAccount: domain.BankAccount{
-				Name: "ING",
-				IBAN: "RODSA!32323a",
-			},
-			StreetAddress: "22 scoala de int",
-			City:          "Sibiu",
-			Country:       "Romania",
-			PostCode:      "550005",
+			StreetAddress:      "22 scoala de int",
+			City:               "Sibiu",
+			Country:            "Romania",
+			PostCode:           "550005",
 		},
 		Currency: "EUR",
 		Created:  time.Now().Format(layoutStr),

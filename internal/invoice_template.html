@@ -126,30 +126,30 @@
                     <tr>
                         <td>
                             <p>Seller</p>
-                        <h3>{{ .UserCompany.Name }}</h3>
-                            {{ .UserCompany.RegistrationNumber }} <br />
-                            {{ .UserCompany.CUI }} <br />
-                            {{ .UserCompany.VatId }} <br />
+                        <h3>{{ .Company.Name }}</h3>
+                            {{ .Company.RegistrationNumber }} <br />
+                            {{ .Company.CUI }} <br />
+                            {{ .Company.VatId }} <br />
                             <br />
-                            {{ .UserCompany.StreetAddress }} <br />
-                            {{ .UserCompany.City }},
-                            {{ .UserCompany.PostCode }}<br />
-                            {{ .UserCompany.Country }}<br />
+                            {{ .Company.StreetAddress }} <br />
+                            {{ .Company.City }},
+                            {{ .Company.PostCode }}<br />
+                            {{ .Company.Country }}<br />
                             <br />
-                            {{ .UserCompany.BankAccount.Name }}><br />
-                            {{ .UserCompany.BankAccount.IBAN }}><br />
+                            {{ .Company.BankAccount.Name }}><br />
+                            {{ .Company.BankAccount.IBAN }}><br />
                         </td>
 
                         <td>
                             <p>Client</p>
-                            <h3>{{ .InvoicedCompany.Name }}</h3>
-                            {{ .InvoicedCompany.RegistrationNumber }}><br />
-                            {{ .InvoicedCompany.VatId }}><br />
+                            <h3>{{ .Client.Name }}</h3>
+                            {{ .Client.RegistrationNumber }}><br />
+                            {{ .Client.VatId }}><br />
                             <br />
-                            {{ .InvoicedCompany.StreetAddress }} <br />
-                            {{ .InvoicedCompany.City }},
-                            {{ .InvoicedCompany.PostCode }}<br />
-                            {{ .InvoicedCompany.Country }}<br />
+                            {{ .Client.StreetAddress }} <br />
+                            {{ .Client.City }},
+                            {{ .Client.PostCode }}<br />
+                            {{ .Client.Country }}<br />
                         </td>
                     </tr>
                 </table>

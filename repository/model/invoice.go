@@ -11,14 +11,14 @@ type ArticleRecords []ArticleRecord
 const layoutStr = "2006-10-02"
 
 type InvoiceRecord struct {
-	Id              string    `db:"id"`
-	UserId          string    `db:"userId"`
-	UserCompanyId   string    `db:"userCompanyId"`
-	BilledCompanyId string    `db:"billedCompanyId"`
-	Currency        string    `db:"currency"`
-	Created         time.Time `db:"created"`
-	Due             time.Time `db:"due"`
-	Total           float64   `db:"total"`
+	Id        string    `db:"id"`
+	UserId    string    `db:"userId"`
+	CompanyId string    `db:"userCompanyId"`
+	ClientId  string    `db:"clientId"`
+	Currency  string    `db:"currency"`
+	Created   time.Time `db:"created"`
+	Due       time.Time `db:"due"`
+	Total     float64   `db:"total"`
 }
 
 type ArticleRecord struct {
@@ -41,26 +41,41 @@ type CompanyRecord struct {
 	StreetAddress      string `db:"streetAddress"`
 	City               string `db:"city"`
 	PostCode           string `db:"postCode"`
+	BankAccountId      string `db:"bankAccountId"`
+}
+
+type ClientRecord struct {
+	Id                 string `db:"id"`
+	Name               string `db:"name"`
+	Country            string `db:"country"`
+	RegistrationNumber string `db:"registrationNumber"`
+	CUI                string `db:"CUI"`
+	VatId              string `db:"vatId"`
+	Email              string `db:"email"`
+	City               string `db:"city"`
+	StreetAddress      string `db:"streetAddress"`
+	PostCode           string `db:"postCode"`
+	Website            string `db:"website"`
+	UserId             string `db:"userId"`
 }
 
 type BankAccountRecord struct {
-	Id        string `db:"id"`
-	CompanyId string `db:"companyId"`
-	Name      string `db:"name"`
-	IBAN      string `db:"iban"`
+	Id   string `db:"id"`
+	Name string `db:"name"`
+	IBAN string `db:"iban"`
 }
 
 func (r InvoiceRecord) ToDomain() domain.Invoice {
 	return domain.Invoice{
-		Id:              r.Id,
-		InvoiceNumber:   r.Id,
-		UserCompany:     domain.Company{},
-		InvoicedCompany: domain.Company{},
-		Currency:        r.Currency,
-		Created:         r.Created.Format(layoutStr),
-		Due:             r.Due.Format(layoutStr),
-		Articles:        nil,
-		Total:           0,
+		Id:            r.Id,
+		InvoiceNumber: r.Id,
+		Company:       domain.Company{},
+		Client:        domain.Client{},
+		Currency:      r.Currency,
+		Created:       r.Created.Format(layoutStr),
+		Due:           r.Due.Format(layoutStr),
+		Articles:      nil,
+		Total:         0,
 	}
 }
 
@@ -80,6 +95,7 @@ func (r CompanyRecord) ToDomain() domain.Company {
 		VatId:              r.VatID,
 		Email:              r.Email,
 		BankAccount:        domain.BankAccount{},
+		BankAccountId:      r.BankAccountId,
 		StreetAddress:      r.StreetAddress,
 		City:               r.City,
 		Country:            r.Country,
@@ -114,4 +130,20 @@ func (r ArticleRecords) ToDomain() []domain.Article {
 		articles[i] = article.ToDomain()
 	}
 	return articles
+}
+
+func (r ClientRecord) ToDomain() domain.Client {
+	return domain.Client{
+		Id:                 r.Id,
+		Name:               r.Name,
+		Country:            r.Country,
+		RegistrationNumber: r.RegistrationNumber,
+		CUI:                r.CUI,
+		VatId:              r.VatId,
+		Email:              r.Email,
+		City:               r.City,
+		PostCode:           r.PostCode,
+		Website:            r.Website,
+		UserId:             r.UserId,
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/rsmarincu/billr/common"
 	"github.com/rsmarincu/billr/domain"
@@ -11,10 +12,11 @@ import (
 )
 
 const (
-	queryInvoices    = `SELECT "id", "userId", "userCompanyId", "invoicedCompanyId", "currency", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
-	queryCompany     = `SELECT "id", "name", "registrationNumber", "cui", "vatId", "email", "country", "streetAddress", "city", "postCode" FROM "Company" WHERE "id"=$1`
+	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
+	queryCompany     = `SELECT "id", "name", "registrationNumber", "cui", "vatId", "country", "streetAddress", "city", "postCode", "bankAccountId" FROM "Company" WHERE "id"=$1`
 	queryArticles    = `SELECT "id", "invoiceId", "description", "quantity", "quantityType", "price" FROM "Article" WHERE "invoiceId"=$1`
-	queryBankAccount = `SELECT "id", "companyId", "name", "IBAN" FROM "BankAccount" WHERE "companyId"=$1`
+	queryBankAccount = `SELECT "id",  "name", "IBAN" FROM "BankAccount" WHERE "id"=$1`
+	queryClient      = `SELECT "id", "name", "country","registrationNumber", "cui", "vatId", "email", "streetAddress", "city",  "postCode", "website", "userId" FROM "Client" WHERE "id"=$1`
 )
 
 type Repository interface {
@@ -37,22 +39,17 @@ func (r *repository) GetInvoice(ctx context.Context, invoiceId string) (domain.I
 		return domain.Invoice{}, fmt.Errorf("error getting invoice: %w", err)
 	}
 
-	invoicedCompany, err := r.getCompanyRecord(ctx, invoiceRecord.BilledCompanyId)
+	client, err := r.getClientRecord(ctx, invoiceRecord.ClientId)
 	if err != nil {
-		return domain.Invoice{}, fmt.Errorf("error getting company with id: %s: %w", invoiceRecord.BilledCompanyId, err)
+		return domain.Invoice{}, fmt.Errorf("error getting company with id: %s: %w", invoiceRecord.ClientId, err)
 	}
 
-	invoicedCompanyBankAccount, err := r.getBankAccount(ctx, invoiceRecord.BilledCompanyId)
+	userCompany, err := r.getCompanyRecord(ctx, invoiceRecord.CompanyId)
 	if err != nil {
-		return domain.Invoice{}, fmt.Errorf("error getting bank account: %w", err)
+		return domain.Invoice{}, fmt.Errorf("error getting company with id: %s: %w", invoiceRecord.CompanyId, err)
 	}
-
-	userCompany, err := r.getCompanyRecord(ctx, invoiceRecord.UserCompanyId)
-	if err != nil {
-		return domain.Invoice{}, fmt.Errorf("error getting company with id: %s: %w", invoiceRecord.UserCompanyId, err)
-	}
-
-	userCompanyBankAccount, err := r.getBankAccount(ctx, invoiceRecord.UserCompanyId)
+	log.Println(userCompany)
+	userCompanyBankAccount, err := r.getBankAccount(ctx, userCompany.BankAccountId)
 	if err != nil {
 		return domain.Invoice{}, fmt.Errorf("error getting bank account: %w", err)
 	}
@@ -63,10 +60,9 @@ func (r *repository) GetInvoice(ctx context.Context, invoiceId string) (domain.I
 	}
 
 	invoice := invoiceRecord.ToDomain()
-	invoicedCompany.BankAccount = invoicedCompanyBankAccount
 	userCompany.BankAccount = userCompanyBankAccount
-	invoice.InvoicedCompany = invoicedCompany
-	invoice.UserCompany = userCompany
+	invoice.Client = client
+	invoice.Company = userCompany
 	invoice.Articles = articles
 
 	var total float64
@@ -84,8 +80,8 @@ func (r *repository) getInvoiceRecord(ctx context.Context, invoiceId string) (mo
 	if err := row.Scan(
 		&invoiceRecord.Id,
 		&invoiceRecord.UserId,
-		&invoiceRecord.UserCompanyId,
-		&invoiceRecord.BilledCompanyId,
+		&invoiceRecord.CompanyId,
+		&invoiceRecord.ClientId,
 		&invoiceRecord.Currency,
 		&invoiceRecord.Created,
 		&invoiceRecord.Due,
@@ -106,11 +102,11 @@ func (r *repository) getCompanyRecord(ctx context.Context, companyId string) (do
 		&companyRecord.RegistrationNumber,
 		&companyRecord.CUI,
 		&companyRecord.VatID,
-		&companyRecord.Email,
 		&companyRecord.Country,
 		&companyRecord.StreetAddress,
 		&companyRecord.City,
 		&companyRecord.PostCode,
+		&companyRecord.BankAccountId,
 	); err != nil {
 		return domain.Company{}, err
 	}
@@ -145,12 +141,11 @@ func (r *repository) getArticles(ctx context.Context, invoiceId string) ([]domai
 	return articleRecords.ToDomain(), nil
 }
 
-func (r *repository) getBankAccount(ctx context.Context, companyId string) (domain.BankAccount, error) {
-	row := r.db.QueryRowContext(ctx, queryBankAccount, companyId)
+func (r *repository) getBankAccount(ctx context.Context, bankAccountId string) (domain.BankAccount, error) {
+	row := r.db.QueryRowContext(ctx, queryBankAccount, bankAccountId)
 	var bankAccountRecord model.BankAccountRecord
 	if err := row.Scan(
 		&bankAccountRecord.Id,
-		&bankAccountRecord.CompanyId,
 		&bankAccountRecord.Name,
 		&bankAccountRecord.IBAN,
 	); err != nil {
@@ -158,4 +153,27 @@ func (r *repository) getBankAccount(ctx context.Context, companyId string) (doma
 	}
 
 	return bankAccountRecord.ToDomain(), nil
+}
+
+func (r *repository) getClientRecord(ctx context.Context, companyId string) (domain.Client, error) {
+	row := r.db.QueryRowContext(ctx, queryClient, companyId)
+	var clientRecord model.ClientRecord
+	if err := row.Scan(
+		&clientRecord.Id,
+		&clientRecord.Name,
+		&clientRecord.Country,
+		&clientRecord.RegistrationNumber,
+		&clientRecord.CUI,
+		&clientRecord.VatId,
+		&clientRecord.Email,
+		&clientRecord.StreetAddress,
+		&clientRecord.City,
+		&clientRecord.PostCode,
+		&clientRecord.Website,
+		&clientRecord.UserId,
+	); err != nil {
+		return domain.Client{}, err
+	}
+
+	return clientRecord.ToDomain(), nil
 }
