@@ -15,7 +15,7 @@ type InvoiceRecord struct {
 	UserId    string    `db:"userId"`
 	CompanyId string    `db:"userCompanyId"`
 	ClientId  string    `db:"clientId"`
-	Currency  string    `db:"currency"`
+	Currency  string    `db:"currency.ts"`
 	Created   time.Time `db:"created"`
 	Due       time.Time `db:"due"`
 	Total     float64   `db:"total"`

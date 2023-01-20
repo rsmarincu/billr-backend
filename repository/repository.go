@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
+	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency.ts", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
 	queryCompany     = `SELECT "id", "name", "registrationNumber", "cui", "vatId", "country", "streetAddress", "city", "postCode", "bankAccountId" FROM "Company" WHERE "id"=$1`
 	queryArticles    = `SELECT "id", "invoiceId", "description", "quantity", "quantityType", "price" FROM "Article" WHERE "invoiceId"=$1`
 	queryBankAccount = `SELECT "id",  "name", "IBAN" FROM "BankAccount" WHERE "id"=$1`
