@@ -15,7 +15,7 @@ type InvoiceRecord struct {
 	UserId    string    `db:"userId"`
 	CompanyId string    `db:"userCompanyId"`
 	ClientId  string    `db:"clientId"`
-	Currency  string    `db:"currency.ts"`
+	Currency  string    `db:"currency"`
 	Created   time.Time `db:"created"`
 	Due       time.Time `db:"due"`
 	Total     float64   `db:"total"`
@@ -56,7 +56,6 @@ type ClientRecord struct {
 	StreetAddress      string `db:"streetAddress"`
 	PostCode           string `db:"postCode"`
 	Website            string `db:"website"`
-	UserId             string `db:"userId"`
 }
 
 type BankAccountRecord struct {
@@ -144,6 +143,5 @@ func (r ClientRecord) ToDomain() domain.Client {
 		City:               r.City,
 		PostCode:           r.PostCode,
 		Website:            r.Website,
-		UserId:             r.UserId,
 	}
 }

@@ -12,11 +12,11 @@ import (
 )
 
 const (
-	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency.ts", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
+	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
 	queryCompany     = `SELECT "id", "name", "registrationNumber", "cui", "vatId", "country", "streetAddress", "city", "postCode", "bankAccountId" FROM "Company" WHERE "id"=$1`
 	queryArticles    = `SELECT "id", "invoiceId", "description", "quantity", "quantityType", "price" FROM "Article" WHERE "invoiceId"=$1`
-	queryBankAccount = `SELECT "id",  "name", "IBAN" FROM "BankAccount" WHERE "id"=$1`
-	queryClient      = `SELECT "id", "name", "country","registrationNumber", "cui", "vatId", "email", "streetAddress", "city",  "postCode", "website", "userId" FROM "Client" WHERE "id"=$1`
+	queryBankAccount = `SELECT "id",  "name", "iban" FROM "BankAccount" WHERE "id"=$1`
+	queryClient      = `SELECT "id", "name", "country","registrationNumber", "cui", "vatId", COALESCE(email, '') as email, "streetAddress", "city",  "postCode", "website" FROM "Client" WHERE "id"=$1`
 )
 
 type Repository interface {
@@ -41,7 +41,7 @@ func (r *repository) GetInvoice(ctx context.Context, invoiceId string) (domain.I
 
 	client, err := r.getClientRecord(ctx, invoiceRecord.ClientId)
 	if err != nil {
-		return domain.Invoice{}, fmt.Errorf("error getting company with id: %s: %w", invoiceRecord.ClientId, err)
+		return domain.Invoice{}, fmt.Errorf("error getting client with id: %s: %w", invoiceRecord.ClientId, err)
 	}
 
 	userCompany, err := r.getCompanyRecord(ctx, invoiceRecord.CompanyId)
@@ -170,7 +170,6 @@ func (r *repository) getClientRecord(ctx context.Context, companyId string) (dom
 		&clientRecord.City,
 		&clientRecord.PostCode,
 		&clientRecord.Website,
-		&clientRecord.UserId,
 	); err != nil {
 		return domain.Client{}, err
 	}
