@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	EnvKeyDatabaseConnection = "DATABASE_URL"
+	EnvKeyDatabaseConnection = "DSN"
 )
 
 type DatabaseService interface {
