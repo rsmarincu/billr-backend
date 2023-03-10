@@ -3,7 +3,7 @@ package common
 import (
 	"database/sql"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -19,7 +19,7 @@ func NewDatabaseService(config Config) DatabaseService {
 	if connStr == "" {
 		panic("please provide database connection")
 	}
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("mysql", connStr)
 	if err != nil {
 		panic(err)
 	}
