@@ -25,7 +25,7 @@ func main() {
 	databaseService := common.NewDatabaseService(config)
 
 	repo := repository.NewRepository(databaseService)
-	pdfBuilder := builder.NewPdfBuilder(repo)
+	pdfBuilder := builder.NewPdfBuilder(repo, config)
 	handler := api.NewHandler(httpService, pdfBuilder)
 	billrService := NewBillrService(handler)
 
