@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/rsmarincu/billr/common"
 	"github.com/rsmarincu/billr/repository"
 )
 
@@ -21,12 +22,15 @@ type PdfBuilder interface {
 type pdfBuilder struct {
 	repository repository.Repository
 	client     http.Client
+	gbUrl      string
 }
 
-func NewPdfBuilder(repository repository.Repository) PdfBuilder {
+func NewPdfBuilder(repository repository.Repository, config common.Config) PdfBuilder {
+	gbUrl := config.GetEnvVariable("GB_URL", "http://localhost:3000/forms/chromium/convert/html")
 	return &pdfBuilder{
 		client:     http.Client{},
 		repository: repository,
+		gbUrl:      gbUrl,
 	}
 }
 
@@ -58,7 +62,7 @@ func (b *pdfBuilder) BuildPdf(ctx context.Context, invoiceId string) ([]byte, st
 	}
 
 	w.Close()
-	req, err := http.NewRequest(http.MethodPost, gottenburgUrl, &body)
+	req, err := http.NewRequest(http.MethodPost, b.gbUrl, &body)
 	if err != nil {
 		return nil, "", err
 	}
