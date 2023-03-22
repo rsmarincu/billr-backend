@@ -13,7 +13,12 @@ import (
 	"github.com/rsmarincu/billr/repository"
 )
 
-const gottenburgUrl = "http://localhost:3000/forms/chromium/convert/html"
+const (
+	gottenburgHost = "http://localhost:3000"
+	gottenburgPath = "/forms/chromium/convert/html"
+
+	EnvKeyGbHost = "GB_HOST"
+)
 
 type PdfBuilder interface {
 	BuildPdf(ctx context.Context, billId string) ([]byte, string, error)
@@ -26,11 +31,11 @@ type pdfBuilder struct {
 }
 
 func NewPdfBuilder(repository repository.Repository, config common.Config) PdfBuilder {
-	gbUrl := config.GetEnvVariable("GB_URL", "http://localhost:3000/forms/chromium/convert/html")
+	gbHost := config.GetEnvVariable(EnvKeyGbHost, gottenburgHost)
 	return &pdfBuilder{
 		client:     http.Client{},
 		repository: repository,
-		gbUrl:      gbUrl,
+		gbUrl:      gbHost + gottenburgPath,
 	}
 }
 
