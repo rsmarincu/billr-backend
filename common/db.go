@@ -3,11 +3,11 @@ package common
 import (
 	"database/sql"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 const (
-	EnvKeyDatabaseConnection = "DSN"
+	EnvKeyDbUrl = "DB_URL"
 )
 
 type DatabaseService interface {
@@ -15,11 +15,9 @@ type DatabaseService interface {
 }
 
 func NewDatabaseService(config Config) DatabaseService {
-	connStr := config.GetEnvVariable(EnvKeyDatabaseConnection, "")
-	if connStr == "" {
-		panic("please provide database connection")
-	}
-	db, err := sql.Open("mysql", connStr)
+	connStr := config.GetEnvVariable(EnvKeyDbUrl, "")
+
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
 	}
