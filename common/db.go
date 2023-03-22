@@ -22,6 +22,11 @@ func NewDatabaseService(config Config) DatabaseService {
 		panic(err)
 	}
 
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	
 	return &databaseService{
 		db: db,
 	}

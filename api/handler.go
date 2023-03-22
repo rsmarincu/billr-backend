@@ -53,7 +53,7 @@ func (s *handler) HandleDownloadBill(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pdf, filename, err := s.builder.BuildPdf(r.Context(), invoiceId)
+	pdf, _, err := s.builder.BuildPdf(r.Context(), invoiceId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response.Status = http.StatusInternalServerError
@@ -64,7 +64,6 @@ func (s *handler) HandleDownloadBill(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachement; filename=%s.pdf", filename))
 	w.Header().Set("Content-Type", "application/pdf")
 	w.Write(pdf)
 
