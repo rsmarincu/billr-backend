@@ -21,4 +21,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/billr-fe:latest
+          tags: ${{secrets.DOCKER_USERNAME}}/billr-be:latest
