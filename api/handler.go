@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -60,6 +61,7 @@ func (s *handler) HandleDownloadBill(w http.ResponseWriter, r *http.Request) {
 		response.Message = "error"
 		response.Data = map[string]interface{}{"data": fmt.Sprintf("error generating pdf: %v", err)}
 		json.NewEncoder(w).Encode(response)
+		log.Printf("cannot build pdf: %v", err)
 		return
 	}
 
