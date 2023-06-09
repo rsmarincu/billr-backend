@@ -45,17 +45,17 @@ type CompanyRecord struct {
 }
 
 type ClientRecord struct {
-	Id                 string `db:"id"`
-	Name               string `db:"name"`
-	Country            string `db:"country"`
-	RegistrationNumber string `db:"registrationNumber"`
-	CUI                string `db:"CUI"`
-	VatId              string `db:"vatId"`
-	Email              string `db:"email"`
-	City               string `db:"city"`
-	StreetAddress      string `db:"streetAddress"`
-	PostCode           string `db:"postCode"`
-	Website            string `db:"website"`
+	Id                 string  `db:"id"`
+	Name               string  `db:"name"`
+	Country            string  `db:"country"`
+	RegistrationNumber string  `db:"registrationNumber"`
+	CUI                string  `db:"CUI"`
+	VatId              string  `db:"vatId"`
+	Email              string  `db:"email"`
+	City               string  `db:"city"`
+	StreetAddress      string  `db:"streetAddress"`
+	PostCode           string  `db:"postCode"`
+	Website            *string `db:"website"`
 }
 
 type BankAccountRecord struct {

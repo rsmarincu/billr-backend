@@ -19,7 +19,7 @@ type Client struct {
 	StreetAddress      string
 	City               string
 	PostCode           string
-	Website            string
+	Website            *string
 	UserId             string
 }
 
