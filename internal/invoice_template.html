@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Invoice</title>
@@ -97,89 +98,91 @@
             text-align: left;
         }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-<div class="invoice-box">
-    <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-            <td colspan="5">
-                <table>
-                    <tr>
-                        <td class="title">
-                            <p>Invoice</p>
-                        </td>
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="5">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <p>Invoice</p>
+                            </td>
 
-                        <td>
-                            Invoice#: {{.InvoiceNumber}}<br />
-                            Issued: {{.Created}}<br />
-                            Due: {{.Due}}
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+                            <td>
+                                Invoice#: {{.InvoiceNumber}}<br />
+                                Issued: {{.Created}}<br />
+                                Due: {{.Due}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-        <tr class="information">
-            <td colspan="5">
-                <table>
-                    <tr>
-                        <td>
-                            <p>Seller</p>
-                        <h3>{{ .Company.Name }}</h3>
-                            {{ .Company.RegistrationNumber }} <br />
-                            {{ .Company.CUI }} <br />
-                            {{ .Company.VatId }} <br />
-                            <br />
-                            {{ .Company.StreetAddress }} <br />
-                            {{ .Company.City }},
-                            {{ .Company.PostCode }}<br />
-                            {{ .Company.Country }}<br />
-                            <br />
-                            {{ .Company.BankAccount.Name }}><br />
-                            {{ .Company.BankAccount.IBAN }}><br />
-                        </td>
+            <tr class="information">
+                <td colspan="5">
+                    <table>
+                        <tr>
+                            <td>
+                                <p>Seller</p>
+                                <h3>{{ .Company.Name }}</h3>
+                                {{ .Company.RegistrationNumber }} <br />
+                                {{ .Company.CUI }} <br />
+                                {{ .Company.VatId }} <br />
+                                <br />
+                                {{ .Company.StreetAddress }} <br />
+                                {{ .Company.City }},
+                                {{ .Company.PostCode }}<br />
+                                {{ .Company.Country }}<br />
+                                <br />
+                                {{ .Company.BankAccount.Name }}><br />
+                                {{ .Company.BankAccount.IBAN }}><br />
+                            </td>
 
-                        <td>
-                            <p>Client</p>
-                            <h3>{{ .Client.Name }}</h3>
-                            {{ .Client.RegistrationNumber }}><br />
-                            {{ .Client.VatId }}><br />
-                            <br />
-                            {{ .Client.StreetAddress }} <br />
-                            {{ .Client.City }},
-                            {{ .Client.PostCode }}<br />
-                            {{ .Client.Country }}<br />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+                            <td>
+                                <p>Client</p>
+                                <h3>{{ .Client.Name }}</h3>
+                                {{ .Client.RegistrationNumber }}><br />
+                                {{ .Client.VatId }}><br />
+                                <br />
+                                {{ .Client.StreetAddress }} <br />
+                                {{ .Client.City }},
+                                {{ .Client.PostCode }}<br />
+                                {{ .Client.Country }}<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-        <tr class="heading">
-            <td>Item</td>
-            <td>UM</td>
-            <td>Qty.</td>
-            <td>Unit Price</td>
-            <td>Amount {{.Currency}}</td>
-        </tr>
-        {{range .Articles}}
-        <tr class="item">
-            <td>{{.Description}}</td>
-            <td>{{.QuantityType}}</td>
-            <td>{{.Quantity}}</td>
-            <td>{{.Price}}</td>
-            <td>{{.Amount}}</td>
+            <tr class="heading">
+                <td>Item</td>
+                <td>UM</td>
+                <td>Qty.</td>
+                <td>Unit Price</td>
+                <td>Amount {{.Currency}}</td>
+            </tr>
+            {{range .Articles}}
+            <tr class="item">
+                <td>{{.Description}}</td>
+                <td>{{.QuantityType}}</td>
+                <td>{{.Quantity}}</td>
+                <td>{{.Price}}</td>
+                <td>{{.Amount}}</td>
 
-        </tr>
-        {{end}}
+            </tr>
+            {{end}}
 
-        <tr class="total">
-            <td colspan="4"></td>
+            <tr class="total">
+                <td colspan="4"></td>
 
-            <td>Total: {{.Total}}</td>
-        </tr>
-    </table>
-</div>
+                <td>Total: {{.Total}}</td>
+            </tr>
+        </table>
+    </div>
 </body>
+
 </html>

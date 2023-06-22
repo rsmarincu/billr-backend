@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="h-[297mm] w-[210mm] p-12 pl-32">
+        <div class="flex justify-between">
+            <div>
+                <p class="pb-2 text-4xl">{{ .Company.name }}</p>
+                <p class="text-sm text-gray-400">{{ .Company.StreetAddress }}</p>
+                <p class="text-sm text-gray-400">{{ .Company.Country }}, {{ .Company.City }}, {{ .Company.PostCode }}
+                <p class="text-sm text-gray-400">{{ .Company.RegistrationNumber }}</p>
+                <p class="text-sm text-gray-400">{{ .Company.VatId }}</p>
+            </div>
+            <div>
+                <img src="logo.png" />
+            </div>
+        </div>
+        <div class="flex justify-between pt-16">
+            <div>
+                <p>{{.Created}}</p>
+                <p class="pb-3 text-4xl font-bold">INVOICE</p>
+                <p class="text-sm font-bold">INVOICE NO. <span class="pl-1 font-normal">{{.InvoiceNumber}}</span></p>
+                <p class="text-sm font-bold">DUE: <span class="pl-1 font-normal">{{.Due}}</span></p>
+            </div>
+            <div class="pl-2 text-right">
+                <p class="text-gray-400">CLIENT</p>
+                <p class="font-bold">{{ .Client.Name }}</p>
+                <p class="text-sm">{{ .Client.Country }}, {{ .Client.City }}, {{ .Client.PostCode }}</p>
+                <p class="text-sm">{{ .Client.StreetAddress }}</p>
+                <p class="text-sm">{{ Client.RegistrationNumber }}</p>
+                <p class="text-sm">{{ Client.VatId }}</p>
+
+            </div>
+        </div>
+        <div class="pt-16">
+            <table class="w-full table-auto text-sm">
+                <thead class="border-b-2">
+                    <tr class="h-10 text-left">
+                        <th>ITEM</th>
+                        <th>UNIT</th>
+                        <th>QUANTITY</th>
+                        <th>PRICE</th>
+                        <th class="text-right">TOTAL {{ .Currency }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Articles}}
+                    <tr class="item">
+                        <td>{{.Description}}</td>
+                        <td>{{.QuantityType}}</td>
+                        <td>{{.Quantity}}</td>
+                        <td>{{.Price}}</td>
+                        <td>{{.Amount}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-end">
+            <p class="pt-6 text-xl font-bold">{{ .Currency }} {{ .Total }}</p>
+        </div>
+        <div class="pt-16 text-sm">
+            <p class="font-bold">PAYMENT ADVICE</p>
+            <p>Bank name: {{ .Company.BankAccount.Name }}</p>
+            <p>IBAN: {{ .Company.BankAccount.IBAN }}</p>
+        </div>
+    </div>
+</body>
+
+</html>
