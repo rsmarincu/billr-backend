@@ -46,7 +46,7 @@ func (b *pdfBuilder) BuildPdf(ctx context.Context, invoiceId string) ([]byte, st
 	}
 
 	pwd, _ := os.Getwd()
-	tmpl := template.Must(template.ParseFiles(pwd + "/internal/invoice_template.html"))
+	tmpl := template.Must(template.ParseFiles(pwd + "/internal/tailwind_template.html"))
 
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, invoice)

@@ -59,6 +59,7 @@ type Article struct {
 }
 
 type BankAccount struct {
-	Name string
-	IBAN string
+	Name  string
+	IBAN  string
+	Swift string
 }

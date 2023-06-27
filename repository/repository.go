@@ -13,10 +13,10 @@ import (
 
 const (
 	queryInvoices    = `SELECT "id", "userId", "companyId", "clientId", "currency", "created", "due", "total" FROM "Invoice" WHERE "id"=$1`
-	queryCompany     = `SELECT "id", "name", "registrationNumber", "cui", "vatId", "country", "streetAddress", "city", "postCode", "bankAccountId" FROM "Company" WHERE "id"=$1`
+	queryCompany     = `SELECT "id", "name", "registrationNumber", "taxId", "vatId", "country", "streetAddress", "city", "postCode", "bankAccountId" FROM "Company" WHERE "id"=$1`
 	queryArticles    = `SELECT "id", "invoiceId", "description", "quantity", "quantityType", "price" FROM "Article" WHERE "invoiceId"=$1`
-	queryBankAccount = `SELECT "id",  "name", "iban" FROM "BankAccount" WHERE "id"=$1`
-	queryClient      = `SELECT "id", "name", "country","registrationNumber", "cui", "vatId", COALESCE(email, '') as email, "streetAddress", "city",  "postCode", "website" FROM "Client" WHERE "id"=$1`
+	queryBankAccount = `SELECT "id",  "name", "iban", "swift" FROM "BankAccount" WHERE "id"=$1`
+	queryClient      = `SELECT "id", "name", "country","registrationNumber", "taxId", "vatId", COALESCE(email, '') as email, "streetAddress", "city",  "postCode", "website" FROM "Client" WHERE "id"=$1`
 )
 
 type Repository interface {
@@ -148,6 +148,7 @@ func (r *repository) getBankAccount(ctx context.Context, bankAccountId string) (
 		&bankAccountRecord.Id,
 		&bankAccountRecord.Name,
 		&bankAccountRecord.IBAN,
+		&bankAccountRecord.Swift,
 	); err != nil {
 		return domain.BankAccount{}, err
 	}

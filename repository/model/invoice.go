@@ -59,9 +59,10 @@ type ClientRecord struct {
 }
 
 type BankAccountRecord struct {
-	Id   string `db:"id"`
-	Name string `db:"name"`
-	IBAN string `db:"iban"`
+	Id    string `db:"id"`
+	Name  string `db:"name"`
+	IBAN  string `db:"iban"`
+	Swift string `db:"swift"`
 }
 
 func (r InvoiceRecord) ToDomain() domain.Invoice {
@@ -80,8 +81,9 @@ func (r InvoiceRecord) ToDomain() domain.Invoice {
 
 func (r BankAccountRecord) ToDomain() domain.BankAccount {
 	return domain.BankAccount{
-		Name: r.Name,
-		IBAN: r.IBAN,
+		Name:  r.Name,
+		IBAN:  r.IBAN,
+		Swift: r.Swift,
 	}
 }
 
